@@ -18,7 +18,7 @@ void main() {
 	vec2 p0 = vec2(gl_VertexID%2, gl_VertexID/2);
 	
 	// define vertex position to fill window
-	vec2 p = 2.0*p - 1.0; 
+	vec2 p = 2.0*p0 - 1.0; 
 
 	// correct for aspect ratio (by stretching x)
 	p.x /= res.x/res.y;
