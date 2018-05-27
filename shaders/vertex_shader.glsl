@@ -25,13 +25,13 @@ void main() {
 
 	gl_Position = vec4(p, 0.0, 1.0);
 
-	// get index of sprite, animated with 24 ticks per second
-	int id = int(gl_InstanceID + 24.0*time) % N;
+	// get index of sprite, animate by looping through all sprites in 1 second
+	int id = int(gl_InstanceID + N*time) % N;
 
 	// convert index to local x and y index coordinates
 	int i = id % Nx;
 	int j = id / Nx;
 
 	// expand to uv coordinates
-	uv = ((vec2(i, j) + vec2(p0.x, 1.0 - p0.y))*sprite_size)/tex_size;
+	uv = vec2(i + p0.x, j + 1.0 - p0.y)*sprite_size/tex_size;
 }

@@ -54,6 +54,7 @@ int main() {
     int x, y, n; // width, height and color component of image
 	unsigned char *data = stbi_load("dude_animation_sheet.png", &x, &y, &n, 0); //http://www.swingswingsubmarine.com/2010/11/25/seasons-after-fall-spritesheet-animation/
 
+	// these numbers are found by trial and error
 	int nx = 130; // width per sprite
 	int ny = 150; // height per sprite
 	int Nx = 7;   // number of sprites per row
@@ -69,9 +70,6 @@ int main() {
     //
     GLuint vao;
     glGenVertexArrays(1, &vao);
-
-
-
 
     //
     glEnable(GL_BLEND);
@@ -112,6 +110,9 @@ int main() {
 
 	return 0;
 }
+
+
+// Boilerplate below
 
 void error_callback(int error, const char* description) {
     fprintf(stderr, "Error: %s (%d)\n", description, error);
