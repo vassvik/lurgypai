@@ -3,6 +3,8 @@
 #include <glad/glad.c>
 #include <GLFW/glfw3.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 
 void error_callback(int error, const char* description);
 char *read_entire_file(const char *filename);
@@ -49,11 +51,33 @@ int main() {
     GLuint program = load_shaders("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
 
     //
+    int x, y, n; // width, height and color component of image
+	unsigned char *data = stbi_load("dude_animation_sheet.png", &x, &y, &n, 0); //http://www.swingswingsubmarine.com/2010/11/25/seasons-after-fall-spritesheet-animation/
+
+	int nx = 130; // width per sprite
+	int ny = 150; // height per sprite
+	int Nx = 7;   // number of sprites per row
+	int N = 27;   // total number of sprites
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    //
     GLuint vao;
     glGenVertexArrays(1, &vao);
 
 
+
+
     //
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glClearColor(1.0, 0.7, 0.4, 1.0);
     while (!glfwWindowShouldClose(window)) {
     	//
@@ -67,9 +91,16 @@ int main() {
 
     	//
     	glUseProgram(program);
+    	glUniform2f(glGetUniformLocation(program, "res"), resx, resy);
+    	glUniform2f(glGetUniformLocation(program, "tex_size"), x, y);
+    	glUniform2f(glGetUniformLocation(program, "sprite_size"), nx, ny);
+    	glUniform1f(glGetUniformLocation(program, "time"), glfwGetTime());
+    	glUniform1i(glGetUniformLocation(program, "Nx"), Nx);
+    	glUniform1i(glGetUniformLocation(program, "N"), N);
 
     	//
     	glBindVertexArray(vao);
+    	glBindTexture(GL_TEXTURE_2D, texture);
     	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     	//

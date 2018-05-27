@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gcc main.c -Iinclude -lglfw && ./a.out
+gcc main.c -Iinclude -lglfw -lm && ./a.out
